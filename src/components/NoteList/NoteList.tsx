@@ -1,5 +1,5 @@
 import css from "./NoteList.module.css";
-import type { Note, NoteId } from "../../types/note";
+import type { Note } from "../../types/note";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteNote } from "../../services/noteService";
 import { useState } from "react";
@@ -11,18 +11,18 @@ interface NoteListProps {
 
 export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
-  const [deletingId, setDeletingId] = useState<NoteId | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const { mutate: deleteMutation } = useMutation({
-    mutationFn: (id: NoteId) => deleteNote(id),
+    mutationFn: (id: string) => deleteNote(id),
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       setDeletingId(null);
-      toast.success("Note deleted ");
+      toast.success("Note deleted");
     },
     onError() {
       setDeletingId(null);
-      toast.error("Failed to delete note ");
+      toast.error("Failed to delete note");
     },
   });
 

@@ -7,6 +7,7 @@ import type { Note } from "../../types/note";
 
 export type NoteFormProps = {
   onCancel: () => void;
+  onSubmit: (newNoteData: { title: string; content: string; tag: Note["tag"] }) => void;
 };
 
 const validationSchema = Yup.object({
