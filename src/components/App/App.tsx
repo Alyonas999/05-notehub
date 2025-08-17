@@ -78,11 +78,10 @@ export default function App() {
 
       <main className={css.main}>
         {isLoading && <strong>Loading notes...</strong>}
-        {status === "loading" && <strong>Creating note...</strong>}
+        {status === "pending" && <strong>Creating note...</strong>}
         {isError && <ErrorMessage message="Error loading notes" />}
         {isFetching && !isLoading && <span>Updating notes...</span>}
 
-    
         {hasResults && (
           <div className={css.paginationWrapper}>
             <Pagination
