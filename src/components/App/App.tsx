@@ -11,7 +11,6 @@ import SearchBox from "../SearchBox/SearchBox";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import NoteForm from "../NoteForm/NoteForm";
 import type { NotesResponse } from "../services/noteService";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import css from "./App.module.css";
 
 export default function App() {
@@ -47,6 +46,8 @@ export default function App() {
     },
   });
 
+  const { mutate, status } = createNoteMutation;
+
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -55,7 +56,7 @@ export default function App() {
     content: string;
     tag: Note["tag"];
   }) => {
-    createNoteMutation.mutate(newNoteData);
+    mutate(newNoteData);
   };
 
   const handleSearch = (value: string) => {
@@ -77,18 +78,16 @@ export default function App() {
 
       <main className={css.main}>
         {isLoading && <strong>Loading notes...</strong>}
-        {createNoteMutation.status === "loading" && <strong>Creating note...</strong>}
+        {status === "loading" && <strong>Creating note...</strong>}
         {isError && <ErrorMessage message="Error loading notes" />}
         {isFetching && !isLoading && <span>Updating notes...</span>}
 
-   
+    
         {hasResults && (
           <div className={css.paginationWrapper}>
             <Pagination
               pageCount={totalPages}
               currentPage={currentPage}
-              previousLabel={<FaChevronLeft />}
-              nextLabel={<FaChevronRight />}
               onPageChange={(selectedItem: { selected: number }) =>
                 setCurrentPage(selectedItem.selected + 1)
               }
@@ -96,12 +95,10 @@ export default function App() {
           </div>
         )}
 
-   
         {data && !isLoading && <NoteList notes={data.notes ?? []} />}
 
         <Toaster position="top-right" />
 
-       
         {isModalOpen && (
           <Modal onClose={handleCloseModal}>
             <NoteForm
