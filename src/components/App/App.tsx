@@ -1,5 +1,10 @@
 import { toast, Toaster } from "react-hot-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import { fetchNotes, createNote } from "../../services/noteService";
 import type { Note } from "../../types/note";
 import NoteList from "../NoteList/NoteList";
@@ -28,6 +33,7 @@ export default function App() {
       await new Promise((resolve) => setTimeout(resolve, 300));
       return result;
     },
+    placeholderData: keepPreviousData, 
   });
 
   const createNoteMutation = useMutation<

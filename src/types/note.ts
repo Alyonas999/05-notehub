@@ -7,6 +7,4 @@ export interface Note {
   tag: Tag;
 }
 
-export type NoteId = Note["id"];
-
-export type Tag =  "General" | "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
+export type Tag = "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
