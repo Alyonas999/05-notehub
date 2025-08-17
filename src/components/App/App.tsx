@@ -14,7 +14,7 @@ import { useDebounce } from "use-debounce";
 import Pagination from "../Pagination/Pagination";
 import Modal from "../Modal/Modal";
 import SearchBox from "../SearchBox/SearchBox";
-import Loader from "../Loader/loader";
+import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import NoteForm from "../NoteForm/NoteForm";
 import type { NotesResponse } from "../services/noteService";
@@ -97,11 +97,11 @@ export default function App() {
         )}
 
         {hasResults && (
-          <Pagination
-            pageCount={totalPages}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-          />
+         <Pagination
+  pageCount={totalPages}
+  currentPage={currentPage}
+  onPageChange={(selectedItem) => setCurrentPage(selectedItem.selected + 1)} 
+/>
         )}
 
         <Toaster position="top-right" />
