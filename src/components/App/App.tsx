@@ -1,7 +1,7 @@
 import { toast, Toaster } from "react-hot-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchNotes, createNote } from "../services/noteService";
-import type { Note } from "../types/note";
+import { fetchNotes, createNote } from "../../services/noteService";
+import type { Note } from "../../types/note";
 import NoteList from "../NoteList/NoteList";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -10,7 +10,7 @@ import Modal from "../Modal/Modal";
 import SearchBox from "../SearchBox/SearchBox";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import NoteForm from "../NoteForm/NoteForm";
-import type { NotesResponse } from "../services/noteService";
+import type { NotesResponse } from "../../services/noteService";
 import css from "./App.module.css";
 
 export default function App() {

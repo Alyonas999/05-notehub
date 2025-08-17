@@ -1,7 +1,7 @@
 import css from "./NoteList.module.css";
-import type { Note, NoteId } from "../types/note";
+import type { Note, NoteId } from "../../types/note";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteNote } from "../services/noteService";
+import { deleteNote } from "../../services/noteService";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 

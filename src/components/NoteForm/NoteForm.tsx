@@ -1,6 +1,6 @@
 import css from "./NoteForm.module.css";
 import { useState } from "react";
-import type { Note } from "../types/note";
+import type { Note } from "../../types/note";
 
 export type NoteFormProps = {
   onCancel: () => void;
