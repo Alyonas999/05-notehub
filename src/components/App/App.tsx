@@ -1,9 +1,5 @@
 import { toast, Toaster } from "react-hot-toast";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchNotes, createNote } from "../services/noteService";
 import type { Note } from "../types/note";
 import NoteList from "../NoteList/NoteList";
@@ -15,12 +11,13 @@ import SearchBox from "../SearchBox/SearchBox";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import NoteForm from "../NoteForm/NoteForm";
 import type { NotesResponse } from "../services/noteService";
+import css from "./App.module.css";
 
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [debouncedSearch] = useDebounce(search, 500);
+  const [debouncedSearch] = useDebounce<string>(search, 500);
   const perPage = 9;
   const queryClient = useQueryClient();
 
@@ -65,36 +62,41 @@ export default function App() {
   const totalPages = data?.totalPages ?? 1;
 
   return (
-    <div>
-      <header>
+    <div className={css.app}>
+      <header className={css.header}>
         <SearchBox onSearch={handleSearch} />
-        <button onClick={handleOpenModal}>
+        <button className={css.createButton} onClick={handleOpenModal}>
           Create note +
         </button>
       </header>
-      <main>
+
+      <main className={css.main}>
         {isLoading && <strong>Loading notes...</strong>}
-
-        {createNoteMutation.isPending && (
-          <strong>Creating note...</strong>
-        )}
-
+        {createNoteMutation.isLoading && <strong>Creating note...</strong>}
         {isError && <ErrorMessage message="Error loading notes" />}
-
         {isFetching && !isLoading && <span>Updating notes...</span>}
 
+        
         {hasResults && (
-          <Pagination
-            pageCount={totalPages}
-            currentPage={currentPage}
-            onPageChange={(selectedItem) => setCurrentPage(selectedItem.selected + 1)}
-          />
+          <div className={css.paginationWrapper}>
+            <Pagination
+              pageCount={totalPages}
+              currentPage={currentPage}
+              previousLabel={null}
+              nextLabel={null}
+              onPageChange={(selectedItem: { selected: number }) =>
+                setCurrentPage(selectedItem.selected + 1)
+              }
+            />
+          </div>
         )}
+
+        
+        {data && !isLoading && <NoteList notes={data.notes ?? []} />}
 
         <Toaster position="top-right" />
 
-        {data && !isLoading && <NoteList notes={data.notes ?? []} />}
-
+        
         {isModalOpen && (
           <Modal onClose={handleCloseModal}>
             <NoteForm
