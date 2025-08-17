@@ -1,10 +1,8 @@
-import css from "./App.module.css";
 import { toast, Toaster } from "react-hot-toast";
 import {
   useQuery,
   useMutation,
   useQueryClient,
-  keepPreviousData,
 } from "@tanstack/react-query";
 import { fetchNotes, createNote } from "../services/noteService";
 import type { Note } from "../types/note";
@@ -14,7 +12,6 @@ import { useDebounce } from "use-debounce";
 import Pagination from "../Pagination/Pagination";
 import Modal from "../Modal/Modal";
 import SearchBox from "../SearchBox/SearchBox";
-import Loader from "../Loader/loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import NoteForm from "../NoteForm/NoteForm";
 import type { NotesResponse } from "../services/noteService";
@@ -34,7 +31,6 @@ export default function App() {
       await new Promise((resolve) => setTimeout(resolve, 300));
       return result;
     },
-    placeholderData: keepPreviousData,
   });
 
   const createNoteMutation = useMutation({
@@ -42,10 +38,10 @@ export default function App() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       setIsModalOpen(false);
-      toast.success("Note created ");
+      toast.success("Note created");
     },
     onError: () => {
-      toast.error("Failed to create note ");
+      toast.error("Failed to create note");
     },
   });
 
@@ -69,39 +65,30 @@ export default function App() {
   const totalPages = data?.totalPages ?? 1;
 
   return (
-    <div className={css.app}>
-      <header className={css.toolbar}>
+    <div>
+      <header>
         <SearchBox onSearch={handleSearch} />
-        <button className={css.button} onClick={handleOpenModal}>
+        <button onClick={handleOpenModal}>
           Create note +
         </button>
       </header>
-      <main className="notes-list">
-        {isLoading && (
-          <div className={css.loaderWrapper}>
-            <Loader />
-          </div>
-        )}
+      <main>
+        {isLoading && <strong>Loading notes...</strong>}
 
         {createNoteMutation.isPending && (
-          <strong className={css.loading}>Creating note...</strong>
+          <strong>Creating note...</strong>
         )}
 
         {isError && <ErrorMessage message="Error loading notes" />}
 
-        {isFetching && !isLoading && (
-          <div className={css.loaderInline}>
-            <Loader />
-            <span>Updating notes...</span>
-          </div>
-        )}
+        {isFetching && !isLoading && <span>Updating notes...</span>}
 
         {hasResults && (
-         <Pagination
-  pageCount={totalPages}
-  currentPage={currentPage}
-  onPageChange={(selectedItem) => setCurrentPage(selectedItem.selected + 1)} 
-/>
+          <Pagination
+            pageCount={totalPages}
+            currentPage={currentPage}
+            onPageChange={(selectedItem) => setCurrentPage(selectedItem.selected + 1)}
+          />
         )}
 
         <Toaster position="top-right" />
